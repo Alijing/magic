@@ -51,6 +51,7 @@ public class NovelContentProcessor implements PageProcessor {
 
     @Override
     public Site getSite() {
+        site.setCharset("GBK");
         return site;
     }
 }

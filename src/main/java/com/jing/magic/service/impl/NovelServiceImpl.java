@@ -9,6 +9,7 @@ import com.jing.magic.mapper.NovelMapper;
 import com.jing.magic.service.NovelChapterService;
 import com.jing.magic.service.NovelContentService;
 import com.jing.magic.service.NovelService;
+import com.jing.magic.util.NumberChangeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,4 +67,24 @@ public class NovelServiceImpl extends ServiceImpl<NovelMapper, Novel> implements
             logger.error("小说下载失败", e);
         }
     }
+
+    @Override
+    public void changeChapterName(Long novelId, HttpServletResponse response) {
+        QueryWrapper<NovelChapter> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("novel_id", novelId);
+        List<NovelChapter> chapters = chapterService.list(queryWrapper);
+        for (int i = 1; i <= chapters.size(); i++) {
+            NovelChapter chapter = chapters.get(i - 1);
+            String name = chapter.getName().replaceAll("\\[", "")
+                    .replaceAll("]", "")
+                    .replaceAll("【", "")
+                    .replaceAll("】", "")
+                    .replaceAll("\\(", "")
+                    .replaceAll("\\)", "");
+            chapter.setName("第" + NumberChangeUtil.digital2Chinese(i) + "章 " + name);
+        }
+        boolean b = chapterService.updateBatchById(chapters);
+        logger.info("修改章节名称结果 : " + b);
+    }
+
 }

@@ -25,4 +25,5 @@ public interface NovelService extends IService<Novel> {
     void download(Long novelId, HttpServletResponse response);
 
 
+    void changeChapterName(Long novelId, HttpServletResponse response);
 }

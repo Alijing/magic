@@ -42,5 +42,10 @@ public class NovelController {
         novelService.download(novelId, response);
     }
 
+    @GetMapping("change/chapter/name/{novelId}")
+    public void changeChapterName(@PathVariable("novelId") Long novelId, HttpServletResponse response) throws Exception {
+        novelService.changeChapterName(novelId, response);
+    }
+
 
 }
